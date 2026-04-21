@@ -1,0 +1,9 @@
+results*/
+models/
+/data/
+src_*/
+__pycache__/
+*.pyc
+.DS_Store
+*.csv
+#*.json

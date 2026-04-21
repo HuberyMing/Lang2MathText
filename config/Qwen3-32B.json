@@ -1,0 +1,24 @@
+{
+    "model_name": "Qwen3-32B",
+    "gpu_ids": [
+        4,
+        5
+    ],
+    "vllm_model_config": {
+        "model": "../models/Qwen/Qwen3-32B",
+        "task": "embed",
+        "trust_remote_code": false,
+        "tensor_parallel_size": 1,
+        "dtype": "auto",
+        "gpu_memory_utilization": 0.6,
+        "max_num_seqs": 4096
+    },
+    "Load_LLM_method": 0,
+    "AutoModel_config": {
+        "model": "../models/Qwen/Qwen3-32B",
+        "pooling": "mean",
+        "layer": 22
+    },
+    "num_hidden_layers": 64,
+    "hidden_size": 5120
+}

@@ -1,0 +1,24 @@
+{
+    "model_name": "Llama-3.3-70B-Instruct",
+    "gpu_ids": [
+        2,
+        3
+    ],
+    "vllm_model_config": {
+        "model": "../models/meta-llama/Llama-3.3-70B-Instruct",
+        "task": "embed",
+        "trust_remote_code": false,
+        "tensor_parallel_size": 1,
+        "dtype": "auto",
+        "gpu_memory_utilization": 0.3,
+        "max_num_seqs": 512
+    },
+    "Load_LLM_method": 0,
+    "AutoModel_config": {
+        "model": "../models/meta-llama/Llama-3.3-70B-Instruct",
+        "pooling": "mean",
+        "layer": 30
+    },
+    "num_hidden_layers": 80,
+    "hidden_size": 8192
+}

@@ -112,8 +112,8 @@ if __name__ == "__main__":
     pca_n_components = 80
     k_features       = 20
 
-    LLM    = 'Llama_70B_mean'
-    subDir = 'Llama-3.3-70B-Instruct_contextMean'
+    # LLM    = 'Llama_70B_mean'; subDir = 'Llama-3.3-70B-Instruct_contextMean'
+    LLM    = 'FoxBrain_70B_mean'; subDir = 'FoxBrain_70B_ContextMean_fMRI'
 
     # ------------------------------------------------------------------ #
     #   Load fMRI dataset

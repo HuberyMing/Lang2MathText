@@ -1,0 +1,12 @@
+
+# --------------- loading data parameters ------------------ #
+BrainFile: 'BNL_WPR_brain_behavior.csv'
+FileDir: 'raw/'  #'BNL_WPR_brain_behavior/'
+
+stimsetid: 'brain-MD1'
+Stim2Brain: 'MathMD'   # 'LangBDS'	or 'MathMD'
+UID_choice: 0
+
+Cond_Name: 'WordItem'
+Cond_values: [0, 1]
+

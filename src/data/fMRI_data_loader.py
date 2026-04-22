@@ -51,7 +51,6 @@ if Choice == 'under_src':
     #   ModuleNotFoundError: python data/fMRI_data_loader.py
     #
     from utils.helper import load_config    # python -m data.fMRI_data_loader
-    from utils.Plt_compare import Plt_2ROI_compare, Plt_ROI_performance
 
     ROOTDIR = os.path.abspath(join(os.path.dirname( __file__ ), '..'))
 
@@ -68,8 +67,6 @@ elif Choice == 'under_data':
     print(sys.path)
 
     from helper import load_config      # at directory utils
-    from Plt_compare import Plt_2ROI_compare, Plt_ROI_performance
-    from Plt_compare import Plt_select_ROI_Wd_C01
 
     ROOTDIR = os.path.abspath(join(os.path.dirname( __file__ ), '../..'))
 
@@ -1117,119 +1114,6 @@ def scale_back_data(y_scaler, df_y_train_scaled, df_y_test_scaled, y_train, y_te
 
     return df_y_train_scBack, df_y_test_scBack
 
-def Plt_scale_train_test(y_train, df_y_train_scaled, df_y_train_scBack,
-                         y_test, df_y_test_scaled, df_y_test_scBack, 
-                        features, select_fID):
-
-    from Plt_compare import Plt_2ROI
-    import matplotlib.pyplot as plt
-
-    fig, ax = plt.subplots(nrows=2, ncols=2, figsize=(9, 8))
-    Plt_2ROI(df_y_train_scaled, features, select_fID, ax[0,0], leg='train scaled')
-    Plt_2ROI(df_y_train_scBack, features, select_fID, ax[0,1], leg='train scBack')
-    Plt_2ROI(y_train, features, select_fID, ax[1,0], leg='train')
-
-    Plt_2ROI(df_y_train_scaled, features, select_fID, ax[1,1], leg='train scaled')
-    Plt_2ROI(df_y_test_scaled, features, select_fID, ax[1,1], leg='test scaled')
-
-
-    fig, ax = plt.subplots(nrows=2, ncols=2, figsize=(9, 8))
-    Plt_2ROI(df_y_test_scaled, features, select_fID, ax[0,0], leg='test scaled')
-    Plt_2ROI(df_y_test_scBack, features, select_fID, ax[0,1], leg='test scBack')
-    Plt_2ROI(y_test, features, select_fID, ax[1,0], leg='test')
-
-    Plt_2ROI(df_y_train_scBack, features, select_fID, ax[1,1], leg='train scBack')
-    Plt_2ROI(df_y_test_scBack, features, select_fID, ax[1,1], leg='test scBack')
-
-    plt.show()
-
-def check_StandardScaler_for_fMRI():
-    # y_train = dataset.whole['UID_fMRI']
-    # y_test  = dataset.whole['UID_fMRI_C01']['C0']
-
-    # y_train = dataset.UIDs_train_test['Avg']['ALL']['fMRI']['train']
-    # y_test  = dataset.UIDs_train_test['Avg']['ALL']['fMRI']['test']    
-
-    y_train = dataset.UIDs_train_test['collect']['ALL']['fMRI']['train']
-    y_test  = dataset.UIDs_train_test['collect']['ALL']['fMRI']['test']
-
-    y_scaler, df_y_train_scaled, df_y_test_scaled = scale_train_test_data(y_train, y_test)
-
-    df_y_train_scBack, df_y_test_scBack = \
-            scale_back_data(y_scaler, df_y_train_scaled, df_y_test_scaled, y_train, y_test)
-
-
-    from sklearn.metrics import mean_squared_error, r2_score
-
-    # 評估模型性能
-    y_pred = y_test     # check ideal case
-    mse_ideal = mean_squared_error(y_test, y_pred, multioutput='raw_values')
-    r2_ideal = r2_score(y_test, y_pred, multioutput='raw_values')
-
-    Plt_scale_train_test(y_train, df_y_train_scaled, df_y_train_scBack,
-                         y_test, df_y_test_scaled, df_y_test_scBack, 
-                        features, select_fID3)
-
-    Plt_scale_train_test(y_train, df_y_train_scaled, df_y_train_scBack,
-                         y_test, df_y_test_scaled, df_y_test_scBack, 
-                        features, select_fID2)
-
-
-def record_Plt_ROI_fMRI_case(Dir_save):
-    #
-    #   ALL
-    #
-    Plt_2ROI_compare(dataset.whole['UID_fMRI_C01'], 
-            features, select_fID1L, select_fID1R, select_fID2, select_fID3, Dir_save, 'fMRI_ALL', 'fMRI ALL')
-
-    Plt_ROI_performance(dataset.whole['UID_fMRI_C01'], 
-                        dataset.whole['UID_fMRI_C01'], 
-                features, select_MD, ['fMRI', 'fMRI'], Dir_save, 'MD_ALL_fMRI_fMRI', 0)
-    Plt_ROI_performance(dataset.whole['UID_fMRI_C01'], 
-                        dataset.whole['UID_fMRI_C01'], 
-                features, select_Lang, ['fMRI', 'fMRI'], Dir_save, 'Lang_ALL_fMRI_fMRI', 0)
-
-    #
-    #   average
-    #
-    Plt_2ROI_compare(dataset.Avg['fMRI_C01'], 
-            features, select_fID1L, select_fID1R, select_fID2, select_fID3, Dir_save, 'fMRI_avg', 'fMRI avg')
-
-    Plt_ROI_performance(dataset.Avg['fMRI_C01'], 
-                        dataset.Avg['fMRI_C01'], 
-                    features, select_MD, ['fMRI', 'fMRI'], Dir_save, 'MD_avg_fMRI_fMRI', 1)
-    Plt_ROI_performance(dataset.Avg['fMRI_C01'], 
-                        dataset.Avg['fMRI_C01'], 
-                    features, select_Lang, ['fMRI', 'fMRI'], Dir_save, 'Lang_avg_fMRI_fMRI', 1)
-
-
-
-def uv_Rotation(x_data_label, y_data_label):
-    (xdata, xlabel) = x_data_label
-    (ydata, ylabel) = y_data_label
-
-    u_data = (xdata + ydata) * np.sqrt(1/2)
-    v_data = (xdata - ydata) * np.sqrt(1/2)
-
-    r_data = np.sqrt(xdata**2 + ydata**2)
-
-
-    axNow.scatter(u_data, v_data, label='C0')
-
-    axNow.set_xlabel('u+v')
-    axNow.set_ylabel('u-v')
-
-    axNow.legend(loc='upper left', shadow=False, fontsize=7)
-
-    axNow.set_box_aspect(1)
-    axNow.set_aspect('equal')
-    axNow.grid(True, which='both')
-
-    axNow.axhline(y=0, color='k')
-    axNow.axvline(x=0, color='k')
-
-    return u_data, v_data
-
 # --------------------------------- #
 #           statistics              #
 # --------------------------------- #
@@ -1349,92 +1233,6 @@ if __name__ == "__main__":
 
     Dir_save  = '../../results/fMRI'
 
-    # check_StandardScaler_for_fMRI()
-    # record_Plt_ROI_fMRI_case(Dir_save)
-
-
-    def check_all_plot():
-        from matplotlib import pyplot as plt
-        from Plt_compare import Plt_select_ROI_Wd_C01, select_2ROI_data
-
-        # Plt_2ROI_compare(dataset.Avg['fMRI_C01'], 
-        #         features, select_fID1L, select_fID1R, select_fID2, select_fID3, Dir_save, 'fMRI_avg', 'fMRI avg')
-
-        fMRI_or_pred_data = dataset.Avg['fMRI_C01']
-        title = 'fMRI avg'
-        select_fID = select_fID3
-
-        Plt_select_ROI_Wd_C01(dataset.Avg['fMRI_C01'], features, fID_LM3, Dir_save)
-        
-        # ROI_values = fMRI_or_pred_data['C0']
-        # xy_data, x_data_label, y_data_label = \
-        #         Get_two_columns_data(ROI_values, features, select_fID)
-        # u_data, v_data = uv_Rotation(x_data_label, y_data_label)
-    check_all_plot()
-
-    # ----------------------------- #
-    #   do statistics               #
-    # ----------------------------- #
-
-    def check_all_statistics():    
-        from Plt_compare import Get_two_columns_data
-        
-        from calc_statistics import MV_T2_statistic, Print_Hotelling
-        from calc_statistics import hotellings_t2_v0, hotellings_t2
-
-        from calc_statistics import Plt_Boxplot, Plt_box_with_p, Plt_box_with_p_v2
-        from calc_statistics import Cohens_d_barplot
-        from calc_statistics import Plt_PCA_TSNE, Plt_PCA
-        from calc_statistics import compare_plot_cov_ellipse
-        from calc_statistics import groupAB2df
-        from calc_statistics import find_Hotelling_statistics
-
-
-        fMRI_or_pred_data = dataset.Avg['fMRI_C01']
-        title = 'fMRI avg'
-        select_fID = select_fID3
-
-        group_C0, C0_x, C0_y = Get_two_columns_data(fMRI_or_pred_data['C0'], features, select_fID)
-        group_C1, C1_x, C1_y = Get_two_columns_data(fMRI_or_pred_data['C1'], features, select_fID)
-
-        only_two_features = 0
-        if only_two_features == 1:
-            group_A = group_C0; roi_A = C0_x[1]
-            group_B = group_C1; roi_B = C0_y[1]
-
-            Plt_pairplot(group_A, group_B)
-
-            # ------ Hotelling's T2 test ------- #
-            results_T2_F, res, result_MV_T2 = find_Hotelling_statistics(group_A, group_B)
-
-        elif only_two_features == 0:
-
-            group_A = fMRI_or_pred_data['C0']; roi_A = FMRI_key_list[59-1]; rLabel = 'Ln3nt'
-            group_B = fMRI_or_pred_data['C1']; roi_B = FMRI_key_list[68-1]; rLabel = rLabel + '_MD3nt'
-
-            results_ROI_all, ROI_all, AB_label, df, result_MV_T2 = Plt_box_with_p_v2(group_A, group_B, \
-                # option=2, fID_LangMD=fID_LangMD, Dir_save=DirFig, Dtype='fMRI')
-                option=3, Part_list=Part_list, Dir_save=Dir_save, append=app, Dtype='fMRI')
-
-        # result_MV_T2_v2 = Cohens_d_barplot(group_A, group_B)   # plot all feartures' Cohen's d
-
-        def Plt_two_features(roi_A, roi_B):
-            # select two features to plot: roi_A, roi_B
-            df, df_melt = Plt_Boxplot(group_A, group_B, roi_A, roi_B)
-            results, features_PltAB = Plt_box_with_p(df, df_melt, result_MV_T2, Dir_save=Dir_save, rLabel=rLabel, Dtype='fMRI')   # feature of roi_A, roi_B
-
-            return results, features_PltAB
-        # results, features_PltAB = Plt_two_features(roi_A, roi_B)
-
-
-        def Plt_PCA_to_check():
-            # ------ PCA two dimension plot ------- #
-            Plt_PCA_TSNE(group_A, group_B)
-            Plt_PCA(group_A, group_B, result_MV_T2)
-            compare_plot_cov_ellipse(group_A, group_B, result_MV_T2)
-        # Plt_PCA_to_check()
-    
-    check_all_statistics()
 
 
 # %%

@@ -65,7 +65,7 @@ _LLM_CONFIG_MAP = {
     'FoxBrain_70B_last': "../config/FoxBrain_70B_SFT_100K_DPO.json",
     'FoxBrain_70B_mean': "../config/FoxBrain_70B_SFT_100K_DPO.json",
     'Qwen2.5-7B':        "../config/Qwen2.5-7B-Instruct.json",
-    'Qwen3-32B':         "../config/Qwen-3-32B.json",
+    'Qwen3-32B':         "../config/Qwen3-32B.json",
     'Llama_3.2B':        "../config/Llama-3.2-3B-Instruct.json",
     'Llama_70B_old':     "../config/Llama-3.3-70B-Instruct.json",
     'Llama_70B_mean':    "../config/Llama-3.3-70B-Instruct.json",
